@@ -112,8 +112,6 @@ ECHO VM was shut down. Starting...
 vagrant reload
 GOTO :eof
 
-
 :DoStatus
 vagrant status
-PAUSE
 GOTO :eof
