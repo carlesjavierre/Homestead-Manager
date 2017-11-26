@@ -15,17 +15,19 @@ GOTO Selector
 :Selector
 CLS
 ECHO Homestead is now up and running. What should I do next?
-ECHO 1. Restart VM
+ECHO 1. Start/Restart VM
 ECHO 2. Suspend/Resume VM 
 ECHO 3. Suspend VM and close
 ECHO 4. Destroy VM and Restart it
 ECHO 5. Destroy VM and close
 ECHO 6. Get Status
-ECHO 7. Close
+ECHO 7. Update
+ECHO 8. Close
 
 CHOICE /C 1234567 /M "Select your option:"
 
-IF ERRORLEVEL 7 EXIT
+IF ERRORLEVEL 8 EXIT
+IF ERRORLEVEL 7 GOTO Update
 IF ERRORLEVEL 6 GOTO GetStatus
 IF ERRORLEVEL 5 GOTO DestroyAndClose
 IF ERRORLEVEL 4 GOTO DestroyAndRestart
@@ -40,6 +42,7 @@ IF ERRORLEVEL 1 GOTO Restart
 CLS
 ECHO Restarting VM...
 CALL :DoReload
+PAUSE
 GOTO Selector
 
 :Suspend
@@ -85,6 +88,15 @@ CALL :DoStatus
 PAUSE
 GOTO Selector
 
+:Update
+CLS
+ECHO Destroying VM...
+CALL :DoDestroy
+ECHO Updating...
+CALL :DoUpdate
+PAUSE
+GOTO Selector
+
 
 :: Main Function classes
 
@@ -114,4 +126,8 @@ GOTO :eof
 
 :DoStatus
 vagrant status
+GOTO :eof
+
+:DoUpdate
+vagrant box update
 GOTO :eof
