@@ -24,7 +24,7 @@ ECHO 6. Get Status
 ECHO 7. Update
 ECHO 8. Close
 
-CHOICE /C 1234567 /M "Select your option:"
+CHOICE /C 12345678 /M "Select your option:"
 
 IF ERRORLEVEL 8 EXIT
 IF ERRORLEVEL 7 GOTO Update
