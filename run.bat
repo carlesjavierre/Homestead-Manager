@@ -7,41 +7,48 @@ SET homestead="%userprofile%\Homestead\"
 SET suspended=0
 
 ECHO Starting Homestead
-CD %homestead% 
-CALL :DoStart
+CD %homestead%
 GOTO Selector
 
 
 :Selector
 CLS
 ECHO Homestead is now up and running. What should I do next?
-ECHO 1. Start/Restart VM
-ECHO 2. Suspend/Resume VM 
-ECHO 3. Suspend VM and close
-ECHO 4. Destroy VM and Restart it
-ECHO 5. Destroy VM and close
-ECHO 6. Get Status
-ECHO 7. Update
-ECHO 8. Close
+ECHO 1. Reload Vagrant
+ECHO 2. Start/Restart VM
+ECHO 3. Suspend/Resume VM
+ECHO 4. Suspend VM and close
+ECHO 5. Destroy VM and Restart it
+ECHO 6. Destroy VM and close
+ECHO 7. Get Status
+ECHO 8. Update
+ECHO 9. Close
 
-CHOICE /C 12345678 /M "Select your option:"
+CHOICE /C 123456789 /M "Select your option:"
 
-IF ERRORLEVEL 8 EXIT
-IF ERRORLEVEL 7 GOTO Update
-IF ERRORLEVEL 6 GOTO GetStatus
-IF ERRORLEVEL 5 GOTO DestroyAndClose
-IF ERRORLEVEL 4 GOTO DestroyAndRestart
-IF ERRORLEVEL 3 GOTO SuspendAndClose
-IF ERRORLEVEL 2 GOTO Suspend
-IF ERRORLEVEL 1 GOTO Restart
+IF ERRORLEVEL 9 EXIT
+IF ERRORLEVEL 8 GOTO Update
+IF ERRORLEVEL 7 GOTO GetStatus
+IF ERRORLEVEL 6 GOTO DestroyAndClose
+IF ERRORLEVEL 5 GOTO DestroyAndRestart
+IF ERRORLEVEL 4 GOTO SuspendAndClose
+IF ERRORLEVEL 3 GOTO Suspend
+IF ERRORLEVEL 2 GOTO Restart
+IF ERRORLEVEL 1 GOTO Reload
 
 
 :: Main Logic
 
+:Reload
+CLS
+ECHO Reloading Vagrant...
+CALL :DoReload
+GOTO Selector
+
 :Restart
 CLS
 ECHO Restarting VM...
-CALL :DoReload
+CALL :DoRestart
 PAUSE
 GOTO Selector
 
@@ -100,6 +107,10 @@ GOTO Selector
 
 :: Main Function classes
 
+:DoReload
+vagrant reload --provision
+GOTO :eof
+
 :DoStart
 vagrant up
 GOTO :eof
@@ -119,7 +130,7 @@ vagrant resume
 SET suspended=0
 GOTO :eof
 
-:DoReload 
+:DoRestart
 ECHO VM was shut down. Starting...
 vagrant reload
 GOTO :eof
