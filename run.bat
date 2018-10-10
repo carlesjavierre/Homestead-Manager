@@ -97,8 +97,6 @@ GOTO Selector
 
 :Update
 CLS
-ECHO Destroying VM...
-CALL :DoDestroy
 ECHO Updating...
 CALL :DoUpdate
 PAUSE
